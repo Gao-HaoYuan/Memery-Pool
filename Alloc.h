@@ -175,7 +175,7 @@ private:
     static char *EndFree;   // 分配内存的尾地址
     static size_t HeapSize; // 附加内存的大小---->
 
-    static obj* Pool; // 以单链表的形式记录分配的内存块，用以内存释放
+    static obj *volatile Pool; // 以单链表的形式记录分配的内存块，用以内存释放
 
     /**
      * 根据申请的块的大小，获取自由链表编号
@@ -225,6 +225,8 @@ public:
             std::free(cur);
             cur = next;
         }
+        
+        Pool = nullptr;
     }
 };
 
@@ -241,7 +243,7 @@ public:
     size_t SecondMalloc<threads, inst>::HeapSize = sizeof(obj);
 
     template<bool threads, int inst>
-    typename SecondMalloc<threads, inst>::obj * SecondMalloc<threads, inst>::Pool = nullptr;
+    typename SecondMalloc<threads, inst>::obj *volatile SecondMalloc<threads, inst>::Pool = nullptr;
 
     template<bool threads, int inst>
     typename SecondMalloc<threads, inst>::obj *volatile SecondMalloc<threads, inst>::FreeList[_NFREELIST] = 
