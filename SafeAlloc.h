@@ -337,7 +337,8 @@ public:
         if(bytes > (size_t)_MAX_BYTES){
             return (Malloc::Allocate(bytes));
         }
-
+        
+        // std::lock_guard<std::mutex> locker(*MtxFreeList.get());
         MtxFreeList->lock();
 
         // 选择自由链表编号
