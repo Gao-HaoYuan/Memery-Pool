@@ -276,11 +276,12 @@ public:
         // 为了逻辑正确还是写了这些代码
         Pool = nullptr;
 
-        for(int i = 0; i < 128; i += 8)
+        for(int i = 0; i < 16; i++)
         {
-            obj *volatile *MyList = FreeList + FreeListIndex(i);
-            *MyList = nullptr;
+            FreeList[i] = nullptr;
         }
+
+     StartFree = EndFree = nullptr;
     }
 };
 
